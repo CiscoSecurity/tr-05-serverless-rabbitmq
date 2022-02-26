@@ -10,6 +10,8 @@ from api.version import version_api
 from api.watchdog import watchdog_api
 from api.errors import TRFormattedError
 from api.utils import jsonify_errors
+from api.extensions import http_rpc
+
 
 app = Flask(__name__)
 
