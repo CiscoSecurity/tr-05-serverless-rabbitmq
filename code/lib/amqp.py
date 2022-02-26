@@ -8,7 +8,7 @@ import ssl
 class RPCClient(object):
     def __init__(self):
         self.key = '1234kjasdlk4as9df8ase34iohaq234'
-        self.server = 'rabbitmq.lan.inetguy.ca'
+        self.server = 'rabbitmq.lan.cyberthre.at'
         self.vhost = '/'
         self.username = 'relay'
         self.password = 'U3s43rdP@rty!!'
@@ -17,6 +17,7 @@ class RPCClient(object):
             cafile="cert/cacert.pem")
         self.context.load_cert_chain("cert/cert.pem",
                                      "cert/key.pem")
+
 
         self.credentials = pika.PlainCredentials(self.username, self.password)
 
