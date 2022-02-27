@@ -1,3 +1,14 @@
+"""
+TODO:
+
+https://github.com/pika/pika/tree/master/examples
+
+- need a better asynchronous consumer/publisher library!!!
+- figure out why when a publisher doesn't respond, the original messdage is just sent back (no timeout callback??)
+- need better connection handling (timeouts, disconnects, basic ack, etc ...)
+
+"""
+
 import pika
 import uuid
 import base64
@@ -7,18 +18,26 @@ import ssl
 
 class RPCClient(object):
     def __init__(self):
-        self.key = '1234kjasdlk4as9df8ase34iohaq234'
-        self.server = 'rabbitmq.lan.cyberthre.at'
-        self.vhost = '/'
-        self.username = 'relay'
-        self.password = 'U3s43rdP@rty!!'
+        self.server = None
+        self.vhost = None
+        self.username = None
+        self.password = None
 
+    def disconnect(self):
+        self.connection.close()
+
+    def connect(self, token, server, vhost, username, password):
+        # setup the connection
+        self.server = server
+        self.vhost = vhost
+        self.username = username
+        self.password = password
+
+        self.key = token
         self.context = ssl.create_default_context(
             cafile="cert/cacert.pem")
         self.context.load_cert_chain("cert/cert.pem",
                                      "cert/key.pem")
-
-
         self.credentials = pika.PlainCredentials(self.username, self.password)
 
         self.ssl_options = pika.SSLOptions(self.context, "client")
@@ -53,4 +72,5 @@ class RPCClient(object):
             body=base64_string)
         while self.response is None:
             self.connection.process_data_events()
+
         return base64.b64decode(self.response).decode()
