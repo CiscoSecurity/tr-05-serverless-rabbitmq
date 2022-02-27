@@ -106,7 +106,7 @@ def get_jwt():
         payload = jwt.decode(
             token, key=key, algorithms=['RS256'], audience=[aud.rstrip('/')]
         )
-        return payload['key']
+        return payload
     except tuple(expected_errors) as error:
         message = expected_errors[error.__class__]
         raise AuthorizationError(message)
